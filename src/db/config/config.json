@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "lauren4c",
+    "password": null,
+    "database": "list-maker",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "lauren4c",
+    "password": null,
+    "database": "list-maker-test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "use_env_variable": "DATABASE_URL",
+    "db": "process.env.DATABASE_URL"
+  }
+}
