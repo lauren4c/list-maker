@@ -1,22 +1,49 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
+var cors = require("cors");
 require("dotenv").config();
-const http = require("http");
-const socketIO = require("socket.io");
 
-const port = 4001;
+// const http = require("http");
+// const socketIO = require("socket.io");
 
 const app = express();
 
-const server = http.createServer(app);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-const io = socketIO(server);
+const appConfig = require("./src/config/main-config.js");
+const routeConfig = require("./src/config/route-config.js");
 
-io.on("connection", socket => {
-  console.log("User connected");
+const port = process.env.PORT || "4001";
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
+appConfig.init(app, express);
+routeConfig.init(app);
+
+app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));
+
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "socket-client/build")));
+
+  // Handle React routing, return all requests to React app
+  app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "socket-client/build", "index.html"));
   });
-});
+}
 
-server.listen(port, () => console.log(`Listening on port ${port}`));
+// const server = http.createServer(app);
+
+// const io = socketIO(server);
+
+// io.on("connection", socket => {
+//   console.log("User connected");
+//
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected");
+//   });
+// });
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
