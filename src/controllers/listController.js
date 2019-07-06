@@ -45,7 +45,6 @@ module.exports = {
     });
   },
   update(req, res, next) {
-    console.log("//THIS IS THE REQ.BODY // " + JSON.stringify(req.body));
     listQueries.editList(req, req.body, (err, list) => {
       if (err) {
         console.log(err);

@@ -11,21 +11,22 @@ describe("Lists", () => {
         {
           name: "Groceries",
           description: "weekly shopping list",
-          user_id: 1
-          // items: [
-          //   {
-          //     description: "Bananas",
-          //     purchased: false,
-          //     list_id: this.list.id
-          //   }
-          // ]
+          user_id: 1,
+          id: 1,
+          items: [
+            {
+              description: "Bananas",
+              purchased: false,
+              list_id: 1
+            }
+          ]
+        },
+        {
+          include: {
+            model: Item,
+            as: "items"
+          }
         }
-        // {
-        //   include: {
-        //     model: Item,
-        //     as: "items"
-        //   }
-        // }
       )
         .then(list => {
           this.list = list;
@@ -46,7 +47,6 @@ describe("Lists", () => {
         description: "I always end up with more than what's on the list"
       })
         .then(list => {
-          //#2
           expect(list.name).toBe("Target List");
           expect(list.description).toBe(
             "I always end up with more than what's on the list"
@@ -75,12 +75,12 @@ describe("Lists", () => {
     });
   });
 
-  // describe("#getItems()", () => {
-  //   it("should return all the items associated with this list", done => {
-  //     this.list.getItems().then(associatedItems => {
-  //       expect(associatedItems[0].description).toBe("Bananas");
-  //       done();
-  //     });
-  //   });
-  // });
+  describe("#getItems()", () => {
+    it("should return all the items associated with this list", done => {
+      this.list.getItems().then(associatedItems => {
+        expect(associatedItems[0].description).toBe("Bananas");
+        done();
+      });
+    });
+  });
 });
