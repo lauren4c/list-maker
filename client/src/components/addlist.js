@@ -16,10 +16,6 @@ class addList extends Component {
     this.handleCreateList = this.handleCreateList.bind(this);
   }
 
-  handleNewListCreated(id) {
-    this.props.history.push(`/lists`);
-  }
-
   handleName(event) {
     this.setState({ name: event.target.value });
   }
@@ -32,7 +28,6 @@ class addList extends Component {
     };
 
     axios.post("/api/lists/new", list).then(res => {
-      console.log(JSON.stringify(res.data));
       if (JSON.stringify(res.data.message).includes("successfully") === true) {
         this.props.history.push("/lists");
 

@@ -8,30 +8,32 @@ const Item = require("../../src/db/models").Item;
 describe("routes : lists", () => {
   beforeEach(done => {
     this.list;
+    this.item;
     sequelize.sync({ force: true }).then(res => {
       List.create(
         {
           name: "Groceries",
           description: "weekly shopping list",
-          user_id: 1
-          //   items: [
-          //     {
-          //       description: "Bananas",
-          //       purchased: false,
-          //       list_id: this.list.id
-          //     }
-          //   ]
+          user_id: 1,
+          id: 1,
+          items: [
+            {
+              description: "Bananas",
+              purchased: false,
+              list_id: 1
+            }
+          ]
+        },
+        {
+          include: {
+            model: Item,
+            as: "items"
+          }
         }
-        // {
-        //   include: {
-        //     model: Item,
-        //     as: "items"
-        //   }
-        // }
       )
         .then(list => {
           this.list = list;
-          // this.item = list.items[0];
+          this.item = list.items[0];
           done();
         })
         .catch(err => {

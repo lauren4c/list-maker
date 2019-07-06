@@ -26,7 +26,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/lists" component={Lists} />
             <Route path="/lists/:id" exact component={ListView} />
-            <Route exact path="/lists/new" component={AddList} />
+            <Route path="/lists/new" component={AddList} />
           </main>
         </div>
       </Router>
