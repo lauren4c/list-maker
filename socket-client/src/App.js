@@ -1,31 +1,35 @@
 import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+// import socketIOClient from "socket.io-client";
+
 import "./App.css";
+import Lists from "./components/lists";
+import AddList from "./components/addlist";
+import Header from "./components/header";
+import Landing from "./components/landing";
+import ListView from "./components/list-view";
 
 // Making the App component
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      endpoint: "localhost:4001",
+  // send = () => {
+  //   const socket = socketIOClient(this.state.endpoint);
+  //   socket.emit("change color", this.state.color);
+  // };
 
-      ///
-      color: "white"
-      ///
-    };
-  }
-
-  send = () => {
-    const socket = socketIOClient(this.state.endpoint);
-    socket.emit("change color", this.state.color);
-  };
-
-  // render method that renders in code if the state is updated
   render() {
     return (
-      <div>
-        <p>Making sure this works</p>
-      </div>
+      <Router>
+        <div className="App">
+          <Header />
+          <main>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/lists" component={Lists} />
+            <Route path="/lists/:id" exact component={ListView} />
+            <Route exact path="/lists/new" component={AddList} />
+          </main>
+        </div>
+      </Router>
     );
   }
 }

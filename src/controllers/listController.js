@@ -10,5 +10,48 @@ module.exports = {
         res.json(lists);
       }
     });
+  },
+
+  create(req, res, next) {
+    let newList = {
+      name: req.body.name,
+      user_id: req.body.user_id
+    };
+    listQueries.addList(newList, (err, list) => {
+      if (err) {
+        console.log(err);
+        res.json({ message: "That didn't work. Please try again" });
+      } else {
+        res.json({ list, message: "List successfully created!" });
+      }
+    });
+  },
+  show(req, res, next) {
+    listQueries.getList(req.params.id, (err, list) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json({ list });
+      }
+    });
+  },
+  destroy(req, res, next) {
+    listQueries.deleteList(req.params.id, (err, list) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json({ message: "List successfully deleted!" });
+      }
+    });
+  },
+  update(req, res, next) {
+    console.log("//THIS IS THE REQ.BODY // " + JSON.stringify(req.body));
+    listQueries.editList(req, req.body, (err, list) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json({ list, message: "List successfully updated!" });
+      }
+    });
   }
 };
