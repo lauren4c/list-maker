@@ -23,11 +23,46 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.list-name {
+  display: inline-block;
+}
+
+.Nav {
+  background: white;
+  color: gray;
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  filter: drop-shadow(0 0 0.2rem #c2c4c2);
+}
+.Nav-Links {
+  display: flex;
+}
+li {
+  list-style-type: none;
+}
+.list-button a {
+  color: white;
+  text-decoration: none;
+}
+.list-button {
+  background-color: #5ead62;
+  font-size: 1em;
+  padding: 10px;
+  border: 0px;
+  border-radius: 10px;
+  margin: 10px;
+  transition: all 0.5s ease;
+}
+.delete-rename {
+  float: right;
+  display: inline-block;
+}
+.list-view {
+  display: flex;
+  flex-direction: column;
 }

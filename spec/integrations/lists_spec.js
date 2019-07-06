@@ -3,18 +3,35 @@ const server = require("../../server");
 const base = "http://localhost:4001/api/lists/";
 const sequelize = require("../../src/db/models/index").sequelize;
 const List = require("../../src/db/models").List;
+const Item = require("../../src/db/models").Item;
 
 describe("routes : lists", () => {
   beforeEach(done => {
     this.list;
     sequelize.sync({ force: true }).then(res => {
-      List.create({
-        name: "Groceries",
-        description: "weekly shopping list",
-        user_id: 1
-      })
+      List.create(
+        {
+          name: "Groceries",
+          description: "weekly shopping list",
+          user_id: 1
+          //   items: [
+          //     {
+          //       description: "Bananas",
+          //       purchased: false,
+          //       list_id: this.list.id
+          //     }
+          //   ]
+        }
+        // {
+        //   include: {
+        //     model: Item,
+        //     as: "items"
+        //   }
+        // }
+      )
         .then(list => {
           this.list = list;
+          // this.item = list.items[0];
           done();
         })
         .catch(err => {
@@ -30,6 +47,77 @@ describe("routes : lists", () => {
         expect(this.list.name).toBe("Groceries");
         console.log(this.list.description);
         done();
+      });
+    });
+  });
+  describe("POST /api/lists/new", () => {
+    const options = {
+      url: `${base}new`,
+      form: {
+        name: "Pet Store",
+        user_id: 1
+      }
+    };
+
+    it("should create a new list", done => {
+      request.post(options, (err, res, body) => {
+        List.findOne({ where: { name: "Pet Store" } })
+          .then(list => {
+            expect(res.statusCode).toBe(200);
+            expect(list.name).toBe("Pet Store");
+            expect(list.user_id).toBe(1);
+            done();
+          })
+          .catch(err => {
+            console.log(err);
+            done();
+          });
+      });
+    });
+  });
+  describe("GET /api/lists/:id", () => {
+    it("should return the selected list", done => {
+      request.get(`${base}${this.list.id}`, (err, res, body) => {
+        expect(err).toBeNull();
+        expect(body).toContain("Groceries");
+        done();
+      });
+    });
+  });
+  describe("POST /api/list/:id/delete", () => {
+    it("should delete the list with the associated ID", done => {
+      List.findAll().then(lists => {
+        const listCountBeforeDelete = lists.length;
+
+        expect(listCountBeforeDelete).toBe(1);
+
+        request.post(`${base}${this.list.id}/delete`, (err, res, body) => {
+          List.findAll().then(lists => {
+            expect(err).toBeNull();
+            expect(lists.length).toBe(listCountBeforeDelete - 1);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  describe("POST /api/lists/:id/edit", () => {
+    it("should update the list with the given values", done => {
+      const options = {
+        url: `${base}${this.list.id}/edit`,
+        form: {
+          Lowes: ""
+        }
+      };
+      request.post(options, (err, res, body) => {
+        expect(err).toBeNull();
+        List.findOne({
+          where: { id: this.list.id }
+        }).then(list => {
+          expect(list.name).toBe("Lowes");
+          done();
+        });
       });
     });
   });
