@@ -9,9 +9,13 @@ import AddList from "./components/addlist";
 import Header from "./components/header";
 import Landing from "./components/landing";
 import ListView from "./components/list-view";
+import SignIn from "./components/signin";
 
-// Making the App component
+import { AuthContext } from "./Auth";
+
 class App extends Component {
+  static contextType = AuthContext;
+
   // send = () => {
   //   const socket = socketIOClient(this.state.endpoint);
   //   socket.emit("change color", this.state.color);
@@ -25,8 +29,9 @@ class App extends Component {
           <main>
             <Route exact path="/" component={Landing} />
             <Route exact path="/lists" component={Lists} />
-            <Route path="/lists/:id" exact component={ListView} />
+            <Route exact path="/lists/:id" exact component={ListView} />
             <Route path="/lists/new" component={AddList} />
+            <Route exact path="/user" component={SignIn} />
           </main>
         </div>
       </Router>

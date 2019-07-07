@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import Lists from "./lists";
-
-// import { AuthContext } from "../Auth";
+import { AuthContext } from "../Auth";
 
 import "../App.css";
 import axios from "axios";
 
 class ListView extends Component {
+  static contextType = AuthContext;
   state = {
     description: "",
     max_budget: "",
@@ -25,7 +25,6 @@ class ListView extends Component {
 
   componentDidMount() {
     axios.get(`/api/lists/${this.props.match.params.id}`).then(res => {
-      console.log(res.data);
       this.setState({
         listName: res.data.list.name,
         items: res.data.list.items,
@@ -48,7 +47,6 @@ class ListView extends Component {
       description: this.state.description,
       list_id: this.state.list_id
     };
-    console.log(newItem);
     axios
       .post(`/api/lists/${this.state.list_id}/items/new`, newItem)
       .then(res => {
@@ -150,8 +148,10 @@ class ListView extends Component {
   }
 
   render() {
-    return (
-      <Router>
+    if (this.context.id === null) {
+      return <p>You must be logged in the view your lists</p>;
+    } else
+      return (
         <div className="list-view">
           <Lists />
           <div className="list-heading">
@@ -179,9 +179,8 @@ class ListView extends Component {
             <input type="submit" value="Add Item" className="User-button" />
           </form>
         </div>
-      </Router>
-    );
+      );
   }
 }
 
-export default ListView;
+export default withRouter(ListView);
