@@ -2,8 +2,8 @@ const List = require("./models").List;
 const Item = require("./models").Item;
 
 module.exports = {
-  getAllLists(callback) {
-    return List.findAll()
+  getAllLists(id, callback) {
+    return List.findAll({ where: { user_id: id } })
       .then(lists => {
         callback(null, lists);
       })
@@ -33,6 +33,7 @@ module.exports = {
       ]
     })
       .then(list => {
+        console.log(list);
         callback(null, list);
       })
       .catch(err => {

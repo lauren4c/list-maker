@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-// import { AuthContext } from "../Auth";
-
+import { AuthContext } from "../Auth";
 import "../App.css";
 import axios from "axios";
 
 class addList extends Component {
-  // static contextType = AuthContext;
+  static contextType = AuthContext;
 
   constructor(props) {
     super(props);
-    this.state = { name: "", user_id: 1 };
+    this.state = { name: "" };
 
     this.handleName = this.handleName.bind(this);
     this.handleCreateList = this.handleCreateList.bind(this);
@@ -22,15 +21,20 @@ class addList extends Component {
 
   handleCreateList(event) {
     event.preventDefault();
+    if (this.state.name === "") {
+      alert("Please enter a name");
+    }
+    if (this.context.id === null) {
+      alert("You must be signed in to do that");
+    }
     const list = {
       name: this.state.name,
-      user_id: this.state.user_id
+      user_id: this.context.id
     };
-
+    console.log(list);
     axios.post("/api/lists/new", list).then(res => {
       if (JSON.stringify(res.data.message).includes("successfully") === true) {
-        this.props.history.push("/lists");
-
+        // this.props.history.push("/lists");
         // this.handleNewListCreated(res.data.list.id);
         // console.log("This is the ID" + res.data.list.id);
       }
@@ -53,6 +57,7 @@ class addList extends Component {
               <input type="submit" value="Create" className="User-button" />
             </div>
           </form>
+          <hr />
         </div>
       </Router>
     );

@@ -1,17 +1,23 @@
 import React, { Component } from "react";
-import { Link, BrowserRouter as Router } from "react-router-dom";
+import { Link, withRouter, BrowserRouter as Router } from "react-router-dom";
+
+import { AuthContext } from "../Auth";
 import AddList from "./addlist";
-// import { AuthContext } from "../Auth";
 import "../App.css";
 import axios from "axios";
 
 class Lists extends Component {
-  state = {
-    lists: []
-  };
+  static contextType = AuthContext;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      lists: []
+    };
+  }
 
   componentDidMount() {
-    axios.get(`/api/lists`).then(res => {
+    axios.get(`/api/lists/user/${this.context.id}`).then(res => {
       this.setState({ lists: res.data });
     });
   }
@@ -21,45 +27,45 @@ class Lists extends Component {
   //   socket.emit("change color", this.state.color);
   // };
   handleListViewChange(id) {
-    this.props.history.push("/lists/id");
+    this.props.history.push(`/lists/${id}`);
   }
 
   results() {
-    // eslint-disable-next-line
-    if (this.state.lists == "") {
-      return <h3>No Lists here. Create a new one!</h3>;
+    if (this.context.id === null) {
+      return <p>Please create an account or sign in to create a list.</p>;
     } else {
-      return (
-        <Router>
-          <div className="all-lists">
-            {this.state.lists.map(list => (
-              <div className="list-name" key={list.id}>
-                <button className="list-button">
-                  <Link
-                    to={`/lists/${list.id}`}
-                    onClick={() => this.props.history.push(`/lists/${list.id}`)}
-                  >
-                    {list.name}
-                  </Link>
-                </button>
-              </div>
-            ))}
-          </div>
-        </Router>
-      );
+      if (this.state.lists === "") {
+        return <h3>No Lists here. Create a new one!</h3>;
+      } else
+        return (
+          <Router>
+            <div className="all-lists">
+              {this.state.lists.map(list => (
+                <div className="list-name" key={list.id}>
+                  <button className="list-button">
+                    <Link
+                      to={`/lists/${list.id}`}
+                      onClick={() => this.handleListViewChange(list.id)}
+                    >
+                      {list.name}
+                    </Link>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </Router>
+        );
     }
   }
 
   render() {
     return (
       <Router>
-        <div>
-          {this.results()}
-          <AddList />
-        </div>
+        <div>{this.results()}</div>
+        <AddList />
       </Router>
     );
   }
 }
 
-export default Lists;
+export default withRouter(Lists);

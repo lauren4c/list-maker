@@ -1,50 +1,56 @@
 const sequelize = require("../../src/db/models/index").sequelize;
 const List = require("../../src/db/models").List;
 const Item = require("../../src/db/models").Item;
+const User = require("../../src/db/models").User;
 
-describe("routes : lists", () => {
+describe("Items", () => {
   beforeEach(done => {
     this.list;
     this.item;
+    this.user;
     sequelize.sync({ force: true }).then(res => {
-      List.create(
-        {
-          name: "Pet Store",
-          description: "the animals are needy",
-          user_id: 1,
-          id: 1,
-          items: [
-            {
-              description: "Kitty Litter",
-              purchased: false,
-              list_id: 1
+      User.create({
+        email: "sammybear@gmail.com",
+        password: "ILoveSnacks"
+      }).then(user => {
+        this.user = user;
+        List.create(
+          {
+            name: "Pet Store",
+            description: "the animals are needy",
+            user_id: this,
+            id: 1,
+            items: [
+              {
+                description: "Kitty Litter",
+                purchased: false,
+                list_id: 1
+              }
+            ]
+          },
+          {
+            include: {
+              model: Item,
+              as: "items"
             }
-          ]
-        },
-        {
-          include: {
-            model: Item,
-            as: "items"
           }
-        }
-      )
-        .then(list => {
-          this.list = list;
-          this.item = list.items[0];
-          done();
-        })
-        .catch(err => {
-          console.log(err);
-          done();
-        });
+        )
+          .then(list => {
+            this.list = list;
+            this.item = list.items[0];
+            done();
+          })
+          .catch(err => {
+            console.log(err);
+            done();
+          });
+      });
     });
   });
   describe("#create()", () => {
     it("should create an item with a description, purchased and list id", done => {
-      //#1
       Item.create({
-        list_id: this.list.id,
-        purchased: false,
+        list_id: 1,
         description: "dog kibble"
       })
         .then(item => {

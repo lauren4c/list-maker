@@ -3,7 +3,7 @@ var cors = require("cors");
 
 module.exports = {
   index(req, res, next) {
-    listQueries.getAllLists((err, lists) => {
+    listQueries.getAllLists(req.params.id, (err, lists) => {
       if (err) {
         console.log(err);
       } else {
