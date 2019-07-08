@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Link, withRouter, BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { AuthContext } from "../Auth";
 import AddList from "./addlist";
-import ListView from "./list-view";
 import "../App.css";
 import axios from "axios";
 
@@ -21,29 +20,39 @@ class Lists extends Component {
     this.handleDescription = this.handleDescription.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
+    this.handleItemRename = this.handleItemRename.bind(this);
+    this.handleItemDelete = this.handleItemDelete.bind(this);
   }
 
-  getUserLists() {
-    this.eventSourch = null;
+  componentDidMount() {
+    this.userListGetter();
+    this.interval = setInterval(() => {
+      this.userListGetter();
+    }, 1000);
+  }
+
+  userListGetter() {
     axios.get(`/api/lists/user/${this.context.id}`).then(res => {
       this.setState({ lists: res.data });
     });
-    this.eventSource = new EventSource(
-      `/api/listswithSSE/user/${this.context.id}`
-    );
-    this.eventSource.onmessage = e => {
-      console.log(e.data);
-    };
-  }
 
+    if (this.state.activeList !== "") {
+      this.interval = setInterval(() => {
+        this.listItemGetter();
+      }, 1000);
+    }
+  }
   componentWillUnmount() {
-    return this.context.logOut;
+    clearInterval(this.interval);
   }
 
   setActiveList(id) {
-    this.setState({ activeList: id });
-    console.log("This is the active List Id" + this.state.activeList);
-    axios.get(`/api/lists/${id}`).then(res => {
+    console.log("This is the ID we are setting for Active List" + id);
+    this.setState({ activeList: id }, () => this.listItemGetter());
+  }
+
+  listItemGetter() {
+    axios.get(`/api/lists/${this.state.activeList}`).then(res => {
       this.setState({
         listName: res.data.list.name,
         items: res.data.list.items
@@ -53,6 +62,7 @@ class Lists extends Component {
   handleDescription(event) {
     this.setState({ itemDescription: event.target.value });
     console.log(this.state.itemDescription);
+    //need to fix this function!!!
   }
 
   handleAddItem(event) {
@@ -64,7 +74,6 @@ class Lists extends Component {
     axios
       .post(`/api/lists/${this.state.activeList}/items/new`, newItem)
       .then(res => {
-        console.log(JSON.stringify(res.data.message));
         if (
           JSON.stringify(res.data.message).includes("successfully") === true
         ) {
@@ -74,7 +83,7 @@ class Lists extends Component {
   }
 
   showListItems() {
-    if (this.state.activeList == "") {
+    if (this.state.activeList === "") {
       return <h3>No Items here. Let's add some!</h3>;
     } else {
       return (
@@ -84,13 +93,19 @@ class Lists extends Component {
               <input
                 type="checkbox"
                 checked={item.purchased}
-                onChange={() => this.handleCheckbox(item.id, !item.purchased)}
+                onChange={this.handleCheckbox.bind(
+                  this,
+                  item.id,
+                  !item.purchased
+                )}
               />
               {item.description}{" "}
               <div className="item-edit-delete">
-                <span onClick={() => this.handleItemRename(item.id)}>Edit</span>
+                <span onClick={this.handleItemRename.bind(this, item.id)}>
+                  Edit
+                </span>
                 /
-                <span onClick={() => this.handleItemDelete(item.id)}>
+                <span onClick={this.handleItemDelete.bind(this, item.id)}>
                   Delete
                 </span>
               </div>
@@ -134,7 +149,7 @@ class Lists extends Component {
     if (window.confirm("Are you sure you want to delete this list?")) {
       axios.post(`/api/lists/${this.state.activeList}/delete`).then(res => {
         if (JSON.stringify(res.data.message).includes("successfully")) {
-          this.props.history.push("/lists");
+          console.log("list deleted!");
         }
       });
     }
@@ -173,27 +188,23 @@ class Lists extends Component {
   }
 
   listResults() {
-    if (this.context.id === null) {
-      return <p>Please create an account or sign in to create a list.</p>;
-    } else {
-      if (this.state.lists === "") {
-        return <h3>No Lists here. Create a new one!</h3>;
-      } else
-        return (
-          <div className="all-lists">
-            {this.state.lists.map(list => (
-              <div className="list-name" key={list.id}>
-                <button
-                  className="list-button"
-                  onClick={() => this.setActiveList(list.id)}
-                >
-                  {list.name}
-                </button>
-              </div>
-            ))}
-          </div>
-        );
-    }
+    if (this.state.lists === "") {
+      return <h3>No Lists here. Create a new one!</h3>;
+    } else
+      return (
+        <div className="all-lists">
+          {this.state.lists.map(list => (
+            <div className="list-name" key={list.id}>
+              <button
+                className="list-button"
+                onClick={this.setActiveList.bind(this, list.id)}
+              >
+                {list.name}
+              </button>
+            </div>
+          ))}
+        </div>
+      );
   }
 
   render() {
@@ -202,21 +213,14 @@ class Lists extends Component {
     } else
       return (
         <Router>
-          <div>
-            {this.getUserLists()}
-            {this.listResults()}
-          </div>
+          <div>{this.listResults()}</div>
           <AddList />
           <div className="list-view">
             <div className="list-heading">
               <h2>{this.state.listName}</h2>
               <div className="delete-rename">
-                <p>
-                  <a onClick={() => this.handleListDelete()}>Delete List</a>
-                </p>
-                <p>
-                  <a onClick={() => this.handleListRename()}>Rename List</a>
-                </p>
+                <p onClick={() => this.handleListDelete()}>Delete List</p>
+                <p onClick={() => this.handleListRename()}>Rename List</p>
               </div>
             </div>
             {this.showListItems()}
