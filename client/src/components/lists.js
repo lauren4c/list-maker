@@ -23,7 +23,7 @@ class Lists extends Component {
     this.handleCheckbox = this.handleCheckbox.bind(this);
   }
 
-  componentDidMount() {
+  getUserLists() {
     this.eventSourch = null;
     axios.get(`/api/lists/user/${this.context.id}`).then(res => {
       this.setState({ lists: res.data });
@@ -35,6 +35,7 @@ class Lists extends Component {
       console.log(e.data);
     };
   }
+
   componentWillUnmount() {
     return this.context.logOut;
   }
@@ -201,7 +202,10 @@ class Lists extends Component {
     } else
       return (
         <Router>
-          <div>{this.listResults()}</div>
+          <div>
+            {this.getUserLists()}
+            {this.listResults()}
+          </div>
           <AddList />
           <div className="list-view">
             <div className="list-heading">

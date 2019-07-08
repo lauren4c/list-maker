@@ -19,7 +19,7 @@ module.exports = {
       setTimeout(() => {
         res.write("data:" + "this is the event source");
         res.write("\n\n");
-      }, 3000);
+      }, 10000);
     });
   },
 
