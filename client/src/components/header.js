@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, BrowserRouter as Router, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { AuthContext } from "../Auth";
 import "../App.css";
 
@@ -19,9 +19,9 @@ class Header extends Component {
       return (
         <section className="user-header">
           <li>
-            <a className="nav-link" onClick={this.context.logOut}>
+            <p className="nav-link" onClick={this.context.logOut}>
               Sign Out
-            </a>
+            </p>
           </li>
         </section>
       );

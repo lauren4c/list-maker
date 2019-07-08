@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter, BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { AuthContext } from "../Auth";
 import AddList from "./addlist";
@@ -8,64 +8,226 @@ import axios from "axios";
 
 class Lists extends Component {
   static contextType = AuthContext;
+  state = {
+    lists: [],
+    itemDescription: "",
+    listName: "",
+    items: [],
+    activeList: ""
+  };
   constructor(props) {
     super(props);
-
-    this.state = {
-      lists: []
-    };
+    this.handleDescription = this.handleDescription.bind(this);
+    this.handleAddItem = this.handleAddItem.bind(this);
+    this.handleCheckbox = this.handleCheckbox.bind(this);
+    this.handleItemRename = this.handleItemRename.bind(this);
+    this.handleItemDelete = this.handleItemDelete.bind(this);
   }
 
   componentDidMount() {
+    this.userListGetter();
+    this.interval = setInterval(() => {
+      this.userListGetter();
+    }, 1000);
+  }
+
+  userListGetter() {
     axios.get(`/api/lists/user/${this.context.id}`).then(res => {
       this.setState({ lists: res.data });
     });
+
+    if (this.state.activeList !== "") {
+      this.interval = setInterval(() => {
+        this.listItemGetter();
+      }, 1000);
+    }
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
-  // send = () => {
-  //   const socket = socketIOClient(this.state.endpoint);
-  //   socket.emit("change color", this.state.color);
-  // };
-  handleListViewChange(id) {
-    this.props.history.push(`/lists/${id}`);
+  setActiveList(id) {
+    console.log("This is the ID we are setting for Active List" + id);
+    this.setState({ activeList: id }, () => this.listItemGetter());
   }
 
-  results() {
-    if (this.context.id === null) {
-      return <p>Please create an account or sign in to create a list.</p>;
+  listItemGetter() {
+    axios.get(`/api/lists/${this.state.activeList}`).then(res => {
+      this.setState({
+        listName: res.data.list.name,
+        items: res.data.list.items
+      });
+    });
+  }
+  handleDescription(event) {
+    this.setState({ itemDescription: event.target.value });
+    console.log(this.state.itemDescription);
+    //need to fix this function!!!
+  }
+
+  handleAddItem(event) {
+    event.preventDefault();
+    const newItem = {
+      description: this.state.itemDescription,
+      list_id: this.state.activeList
+    };
+    axios
+      .post(`/api/lists/${this.state.activeList}/items/new`, newItem)
+      .then(res => {
+        if (
+          JSON.stringify(res.data.message).includes("successfully") === true
+        ) {
+          console.log("item added!");
+        }
+      });
+  }
+
+  showListItems() {
+    if (this.state.activeList === "") {
+      return <h3>No Items here. Let's add some!</h3>;
     } else {
-      if (this.state.lists === "") {
-        return <h3>No Lists here. Create a new one!</h3>;
-      } else
-        return (
-          <Router>
-            <div className="all-lists">
-              {this.state.lists.map(list => (
-                <div className="list-name" key={list.id}>
-                  <button className="list-button">
-                    <Link
-                      to={`/lists/${list.id}`}
-                      onClick={() => this.handleListViewChange(list.id)}
-                    >
-                      {list.name}
-                    </Link>
-                  </button>
-                </div>
-              ))}
+      return (
+        <div className="all-items">
+          {this.state.items.map(item => (
+            <div key={item.id}>
+              <input
+                type="checkbox"
+                checked={item.purchased}
+                onChange={this.handleCheckbox.bind(
+                  this,
+                  item.id,
+                  !item.purchased
+                )}
+              />
+              {item.description}{" "}
+              <div className="item-edit-delete">
+                <span onClick={this.handleItemRename.bind(this, item.id)}>
+                  Edit
+                </span>
+                /
+                <span onClick={this.handleItemDelete.bind(this, item.id)}>
+                  Delete
+                </span>
+              </div>
+              <hr />
             </div>
-          </Router>
-        );
+          ))}
+          <div className="add-item">
+            <form className="add-item" onSubmit={e => this.handleAddItem(e)}>
+              <input
+                type="text"
+                name="description"
+                placeholder="Add Item"
+                value={this.state.value}
+                onChange={this.handleDescription}
+                className="form-control"
+                required
+              />
+              <input type="submit" value="Add Item" className="User-button" />
+            </form>
+          </div>
+        </div>
+      );
+    }
+  }
+  handleCheckbox(id, purchaseStatus) {
+    const updatedItem = {
+      purchased: purchaseStatus
+    };
+    axios
+      .post(`/api/lists/${this.state.activeList}/items/${id}/edit`, updatedItem)
+      .then(res => {
+        console.log(JSON.stringify(res.data.message));
+        if (
+          JSON.stringify(res.data.message).includes("successfully") === true
+        ) {
+          console.log("item updated!");
+        }
+      });
+  }
+  handleListDelete() {
+    if (window.confirm("Are you sure you want to delete this list?")) {
+      axios.post(`/api/lists/${this.state.activeList}/delete`).then(res => {
+        if (JSON.stringify(res.data.message).includes("successfully")) {
+          console.log("list deleted!");
+        }
+      });
+    }
+  }
+  handleListRename() {
+    let newName = window.prompt("Enter new list name:");
+    axios
+      .post(`/api/lists/${this.state.activeList}/edit`, newName)
+      .then(res => {
+        if (JSON.stringify(res.data.message).includes("successfully")) {
+          this.setState({ listName: res.data.list.name });
+          console.log("Success!");
+        }
+      });
+  }
+  handleItemRename(id) {
+    let newName = { description: window.prompt("Enter new item name:") };
+    axios
+      .post(`/api/lists/${this.state.activeList}/items/${id}/edit`, newName)
+      .then(res => {
+        if (JSON.stringify(res.data.message).includes("successfully")) {
+          console.log("Item Name Updated");
+        }
+      });
+  }
+  handleItemDelete(id) {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      axios
+        .post(`/api/lists/${this.state.activeList}/items/${id}/delete`)
+        .then(res => {
+          if (JSON.stringify(res.data.message).includes("successfully")) {
+            console.log("Item has been deleted)");
+          }
+        });
     }
   }
 
+  listResults() {
+    if (this.state.lists === "") {
+      return <h3>No Lists here. Create a new one!</h3>;
+    } else
+      return (
+        <div className="all-lists">
+          {this.state.lists.map(list => (
+            <div className="list-name" key={list.id}>
+              <button
+                className="list-button"
+                onClick={this.setActiveList.bind(this, list.id)}
+              >
+                {list.name}
+              </button>
+            </div>
+          ))}
+        </div>
+      );
+  }
+
   render() {
-    return (
-      <Router>
-        <div>{this.results()}</div>
-        <AddList />
-      </Router>
-    );
+    if (this.context.id === null) {
+      return <p>You must be logged in the view your lists</p>;
+    } else
+      return (
+        <Router>
+          <div>{this.listResults()}</div>
+          <AddList />
+          <div className="list-view">
+            <div className="list-heading">
+              <h2>{this.state.listName}</h2>
+              <div className="delete-rename">
+                <p onClick={() => this.handleListDelete()}>Delete List</p>
+                <p onClick={() => this.handleListRename()}>Rename List</p>
+              </div>
+            </div>
+            {this.showListItems()}
+          </div>
+        </Router>
+      );
   }
 }
 
-export default withRouter(Lists);
+export default Lists;
