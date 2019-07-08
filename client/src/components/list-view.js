@@ -8,13 +8,12 @@ import axios from "axios";
 
 class ListView extends Component {
   static contextType = AuthContext;
-  state = {
-    description: "",
-    max_budget: "",
-    listName: "",
-    items: [],
-    list_id: ""
-  };
+  // state = {
+  //   description: "",
+  //   listName: "",
+  //   items: [],
+  //   list_id: ""
+  // };
   constructor(props) {
     super(props);
 
@@ -22,16 +21,16 @@ class ListView extends Component {
     this.handleMaxBudget = this.handleMaxBudget.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
   }
-
-  componentDidMount() {
-    axios.get(`/api/lists/${this.props.match.params.id}`).then(res => {
-      this.setState({
-        listName: res.data.list.name,
-        items: res.data.list.items,
-        list_id: this.props.match.params.id
-      });
-    });
-  }
+  //
+  // getActiveList(id) {
+  //   axios.get(`/api/lists/${id}`).then(res => {
+  //     this.setState({
+  //       listName: res.data.list.name,
+  //       items: res.data.list.items,
+  //       list_id: this.props.match.params.id
+  //     });
+  //   });
+  // }
 
   handleDescription(event) {
     this.setState({ description: event.target.value });
@@ -147,7 +146,7 @@ class ListView extends Component {
     }
   }
 
-  render() {
+  render(props) {
     if (this.context.id === null) {
       return <p>You must be logged in the view your lists</p>;
     } else
@@ -155,7 +154,7 @@ class ListView extends Component {
         <div className="list-view">
           <Lists />
           <div className="list-heading">
-            <h2>{this.state.listName}</h2>
+            <h2>{props.listName}</h2>
             <div className="delete-rename">
               <p>
                 <a onClick={() => this.handleListDelete()}>Delete List</a>

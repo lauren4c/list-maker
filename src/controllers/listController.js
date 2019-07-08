@@ -9,6 +9,17 @@ module.exports = {
       } else {
         res.json(lists);
       }
+      //adding server-sent-events to get all lists for user
+
+      res.writeHead(200, {
+        Connection: "keep-alive",
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache"
+      });
+      setTimeout(() => {
+        res.write("data:" + "this is the event source");
+        res.write("\n\n");
+      }, 3000);
     });
   },
 
