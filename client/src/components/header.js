@@ -33,7 +33,7 @@ class Header extends Component {
         <h3>
           Everybody Loves a
           <br />
-          <a href="/lists">List maker!</a>
+          List maker!
         </h3>
         <ul className="Nav-Links">{this.showSignInOut(this.context.id)}</ul>
       </div>

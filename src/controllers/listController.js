@@ -1,5 +1,6 @@
 const listQueries = require("../db/queries.lists.js");
 var cors = require("cors");
+const List = require("../db/models").List;
 
 module.exports = {
   index(req, res, next) {
@@ -17,12 +18,22 @@ module.exports = {
       name: req.body.name,
       user_id: req.body.user_id
     };
-    listQueries.addList(newList, (err, list) => {
-      if (err) {
-        console.log(err);
-        res.json({ message: "That didn't work. Please try again" });
+    List.findOne({
+      where: { name: newList.name, user_id: newList.user_id }
+    }).then(list => {
+      if (list) {
+        res.json({
+          message: "That list already exists. Please choose a new name"
+        });
       } else {
-        res.json({ list, message: "List successfully created!" });
+        listQueries.addList(newList, (err, list) => {
+          if (err) {
+            console.log(err);
+            res.json({ message: "That didn't work. Please try again" });
+          } else {
+            res.json({ list, message: "List successfully created!" });
+          }
+        });
       }
     });
   },

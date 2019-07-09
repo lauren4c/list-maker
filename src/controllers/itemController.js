@@ -1,4 +1,5 @@
 const itemQueries = require("../db/queries.items.js");
+
 var cors = require("cors");
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
       list_id: req.body.list_id,
       max_budget: req.body.max_budget
     };
+
     itemQueries.addItem(newItem, (err, item) => {
       if (err) {
         console.log(err);

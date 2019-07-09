@@ -8,9 +8,10 @@ const Landing = () => (
     <div className="Main-text">
       <h1>Welcome to The Ultimate Shopping list App</h1>
       <p>
-        Once you <Link to="/user">create an account</Link>, you can create
-        real-time shopping lists with friends and family. Add lists, add items
-        to each list, and then check them off when purchase them. Try it out!
+        Create real-time shopping lists to share with with friends and family.
+        Add lists, add items to each list, and then check it off when purchased
+        or finished. Try it out! The app is free, you just need to{" "}
+        <Link to="/user"> log in or create an account</Link> to get started.
       </p>
     </div>
   </section>

@@ -21,6 +21,8 @@ class addList extends Component {
 
   handleCreateList(event) {
     event.preventDefault();
+    event.target.reset();
+
     if (this.state.name === "") {
       alert("Please enter a name");
     }
@@ -31,12 +33,9 @@ class addList extends Component {
       name: this.state.name,
       user_id: this.context.id
     };
-    console.log(list);
     axios.post("/api/lists/new", list).then(res => {
-      if (JSON.stringify(res.data.message).includes("successfully") === true) {
-        // this.props.history.push("/lists");
-        // this.handleNewListCreated(res.data.list.id);
-        // console.log("This is the ID" + res.data.list.id);
+      if (JSON.stringify(res.data.message).includes("already exists")) {
+        alert(res.data.message);
       }
     });
   }
@@ -54,7 +53,7 @@ class addList extends Component {
                 onChange={this.handleName}
                 className="form-control"
               />
-              <input type="submit" value="Create" className="User-button" />
+              <input type="submit" value="+" className="add-button" />
             </div>
           </form>
           <hr />
