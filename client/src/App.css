@@ -2,29 +2,16 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+main {
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.all-lists {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-flow: row || wrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: stretch;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
 .list-name {
-  display: inline-block;
+  flex-grow: 1;
 }
 
 .Nav {
@@ -35,33 +22,31 @@
   position: sticky;
   top: 0;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  filter: drop-shadow(0 0 0.2rem #c2c4c2);
+  padding-left: 20px;
+  padding-right: 20px;
 }
-.Nav-Links {
-  display: flex;
-}
+
 li {
   list-style-type: none;
 }
-.list-button a {
-  color: white;
+.list-button p {
   text-decoration: none;
 }
 .list-button {
   background-color: #5ead62;
+  color: white;
   font-size: 1em;
   padding: 10px;
   border: 0px;
-  border-radius: 10px;
-  margin: 10px;
-  transition: all 0.5s ease;
+  margin: 5px;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 4em;
 }
-.delete-rename {
-  float: right;
-  display: inline-block;
+.list-button:hover {
+  background-color: gray;
 }
+
 .list-view {
   display: flex;
   flex-direction: column;
@@ -77,4 +62,109 @@ hr {
     rgba(0, 0, 0, 0.25),
     rgba(0, 0, 0, 0)
   );
+  flex-basis: 100%;
+}
+.item {
+  padding-top: 20px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.check-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1.5em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 30px;
+  width: 30px;
+  background-color: #eee;
+}
+
+.check-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.check-container input:checked ~ .checkmark {
+  background-color: #5ead62;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.check-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.check-container .checkmark:after {
+  left: 12px;
+  top: 5px;
+  width: 5px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.item-edit-delete,
+.delete-rename {
+  padding-left: 1em;
+  color: #bbb;
+  font-size: 1em;
+}
+.form-control {
+  height: 30px;
+  margin: 10px;
+  font-size: 1em;
+  text-align: center;
+}
+.list-heading {
+  font-size: 1.5em;
+  line-height: 0.5em;
+}
+.delete-rename {
+  font-size: 0.75em;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+.add-button {
+  background-color: transparent;
+  font-size: 3em;
+  color: #5ead62;
+  border-color: transparent;
+  line-height: 1em;
+  transition: all 0.3s ease;
+}
+
+.add-button:hover {
+  transform: scale(1.3);
+}
+#selected {
+  background-color: gray;
 }
