@@ -30,7 +30,6 @@ module.exports = {
   },
   update(req, res, next) {
     itemQueries.editItem(req, req.body, (err, item) => {
-      console.log(req.body);
       if (err) {
         console.log(err);
       } else {

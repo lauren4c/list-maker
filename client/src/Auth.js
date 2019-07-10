@@ -12,7 +12,6 @@ export default class AuthProvider extends Component {
   }
 
   logIn = (id, email, group_id) => {
-    console.log("user is logged in with id of " + id);
     this.setState({
       id: id,
       email: email,

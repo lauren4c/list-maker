@@ -8,6 +8,7 @@ const User = require("../../src/db/models").User;
 
 describe("routes : items", () => {
   beforeEach(done => {
+    this.user;
     this.list;
     this.item;
     sequelize.sync({ force: true }).then(res => {
@@ -22,12 +23,12 @@ describe("routes : items", () => {
             name: "Groceries",
             description: "weekly shopping list",
             user_id: this.user.id,
-            id: 1,
+            id: 5,
             items: [
               {
                 description: "Bananas",
                 purchased: false,
-                list_id: 1
+                list_id: 5
               }
             ]
           },

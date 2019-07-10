@@ -3,7 +3,7 @@ const Item = require("./models").Item;
 
 module.exports = {
   getAllLists(id, callback) {
-    return List.findAll({ where: { user_id: id } })
+    return List.findAll({ where: { user_id: id }, order: [["name", "ASC"]] })
       .then(lists => {
         callback(null, lists);
       })
@@ -30,10 +30,10 @@ module.exports = {
           model: Item,
           as: "items"
         }
-      ]
+      ],
+      order: [[{ model: Item, as: "items" }, "description", "ASC"]]
     })
       .then(list => {
-        console.log(list);
         callback(null, list);
       })
       .catch(err => {

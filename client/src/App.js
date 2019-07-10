@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-
-// import socketIOClient from "socket.io-client";
-
 import "./App.css";
 import Lists from "./components/lists";
 import AddList from "./components/addlist";
@@ -14,11 +11,6 @@ import { AuthContext } from "./Auth";
 
 class App extends Component {
   static contextType = AuthContext;
-
-  // send = () => {
-  //   const socket = socketIOClient(this.state.endpoint);
-  //   socket.emit("change color", this.state.color);
-  // };
 
   render() {
     return (

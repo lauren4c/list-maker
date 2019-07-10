@@ -23,12 +23,12 @@ describe("routes : lists", () => {
             name: "Groceries",
             description: "weekly shopping list",
             user_id: this.user.id,
-            id: 1,
+            id: 4,
             items: [
               {
                 description: "Bananas",
                 purchased: false,
-                list_id: 1
+                list_id: 4
               }
             ]
           },
@@ -59,7 +59,6 @@ describe("routes : lists", () => {
       }).then(user => {
         request.get(
           {
-            // mock authentication
             url: "http://localhost:4001/auth/fake",
             form: {
               userId: user.id,
@@ -77,7 +76,6 @@ describe("routes : lists", () => {
       request.get(`${base}user/${this.user.id}`, (err, res, body) => {
         expect(res.statusCode).toBe(200);
         expect(this.list.name).toBe("Groceries");
-        console.log(this.list.description);
         done();
       });
     });
