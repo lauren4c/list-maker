@@ -28,9 +28,10 @@ Live site: https://lauren4c-list-maker.herokuapp.com/
 -User log-in and authentication via Express and Passport. User passwords are hashed and saved in a PostgreSQL database.  
 -Users can then create multiple lists, and also rename and delete them.  
 -Items can be added to each list, marked-as-completed, renamed, and deleted.  
--All of this is done in real-time via a `setInterval()` Axios call to the server, once every second to mimic real-time updates. While this process works fine for this project, it is not a feasible way to do it if the app were to scale. Given more time, I would like to set the app up with `Sockets.io` for the real-time functions.
+-All of this is done in real-time via a recursive `setTimeout()` Axios call to the server, once every 1.5 seconds to mimic real-time updates. While this process works fine for this project, it is not a feasible way to do it if the app were to scale. Given more time, I would like to set the app up with `Sockets.io` for the real-time functions.
 
 ### Upcoming Features:
+
 Check out the [live project board](https://trello.com/b/6tXWNv5w/synced-shopping-list).  
 The 7-day timeline limited the time and features I was able to put into this app. Given more time, I would like to do the following:
 
