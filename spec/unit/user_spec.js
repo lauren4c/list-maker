@@ -3,7 +3,6 @@ const User = require("../../src/db/models").User;
 
 describe("User", () => {
   beforeEach(done => {
-    // #1
     sequelize
       .sync({ force: true })
       .then(() => {
@@ -16,7 +15,6 @@ describe("User", () => {
   });
 
   describe("#create()", () => {
-    // #2
     it("should create a User object with a valid email and password", done => {
       User.create({
         email: "user@example.com",
