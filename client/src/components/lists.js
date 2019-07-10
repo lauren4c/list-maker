@@ -39,7 +39,7 @@ class Lists extends Component {
           that.setState({ lists: res.data });
           loop();
         });
-      }, 1500);
+      }, 1000);
     })();
   }
 
@@ -68,7 +68,7 @@ class Lists extends Component {
           });
           loop();
         });
-      }, 1500);
+      }, 1000);
     })();
   }
   handleDescription(event) {
@@ -95,7 +95,9 @@ class Lists extends Component {
   }
 
   showListItems() {
-    if (this.state.activeList !== "" && this.state.items === []) {
+    if (this.state.activeList === "") {
+      return;
+    } else if (this.state.activeList !== "" && this.state.items === []) {
       return <h3>No Items here. Let's add some!</h3>;
     } else {
       return (
@@ -161,7 +163,7 @@ class Lists extends Component {
   }
   handleListDelete() {
     if (window.confirm("Are you sure you want to delete this list?")) {
-      this.setState({ activeList: "", listName: "" });
+      this.setState({ activeList: "", listName: "", items: [] });
       axios.post(`/api/lists/${this.state.activeList}/delete`).then(res => {
         if (JSON.stringify(res.data.message).includes("successfully")) {
           console.log("list deleted!");
