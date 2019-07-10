@@ -23,12 +23,10 @@ describe("routes : lists", () => {
             name: "Groceries",
             description: "weekly shopping list",
             user_id: this.user.id,
-            id: 4,
             items: [
               {
                 description: "Bananas",
-                purchased: false,
-                list_id: 4
+                purchased: false
               }
             ]
           },
@@ -38,16 +36,11 @@ describe("routes : lists", () => {
               as: "items"
             }
           }
-        )
-          .then(list => {
-            this.list = list;
-            this.item = list.items[0];
-            done();
-          })
-          .catch(err => {
-            console.log(err);
-            done();
-          });
+        ).then(list => {
+          this.list = list;
+          this.item = list.items[0];
+          done();
+        });
       });
     });
   });

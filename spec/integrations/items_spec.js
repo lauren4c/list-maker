@@ -23,12 +23,9 @@ describe("routes : items", () => {
             name: "Groceries",
             description: "weekly shopping list",
             user_id: this.user.id,
-            id: 5,
             items: [
               {
-                description: "Bananas",
-                purchased: false,
-                list_id: 5
+                description: "Bananas"
               }
             ]
           },
@@ -38,16 +35,11 @@ describe("routes : items", () => {
               as: "items"
             }
           }
-        )
-          .then(list => {
-            this.list = list;
-            this.item = list.items[0];
-            done();
-          })
-          .catch(err => {
-            console.log(err);
-            done();
-          });
+        ).then(list => {
+          this.list = list;
+          this.item = list.items[0];
+          done();
+        });
       });
     });
   });
@@ -55,9 +47,7 @@ describe("routes : items", () => {
     const options = {
       url: `${base}${this.list_id}/items/new`,
       form: {
-        description: "Salad mix",
-        purchased: false,
-        list_id: this.list_id
+        description: "Salad mix"
       }
     };
 
@@ -81,21 +71,18 @@ describe("routes : items", () => {
 
   describe("POST /api/lists/:id/items/:id/delete", () => {
     it("should delete the item with the associated ID", done => {
-      Item.findAll().then(items => {
-        const itemsCountBeforeDelete = items.length;
-        expect(itemsCountBeforeDelete).toBe(1);
+      expect(this.item.id).toBe(1);
 
-        request.post(
-          `${base}${this.list.id}/items/${this.item.id}/delete`,
-          (err, res, body) => {
-            Item.findAll().then(items => {
-              expect(err).toBeNull();
-              expect(items.length).toBe(itemsCountBeforeDelete - 1);
-              done();
-            });
-          }
-        );
-      });
+      request.post(
+        `${base}${this.list.id}/items/${this.item.id}/delete`,
+        (err, res, body) => {
+          Item.findByPk(1).then(item => {
+            expect(err).toBeNull();
+            expect(item).toBe(null);
+            done();
+          });
+        }
+      );
     });
   });
 

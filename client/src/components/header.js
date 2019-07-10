@@ -31,7 +31,7 @@ class Header extends Component {
     return (
       <div className="Nav">
         <h3>
-          Everybody Loves a
+          The Ultimate
           <br />
           List-Maker!
         </h3>

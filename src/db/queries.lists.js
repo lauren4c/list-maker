@@ -31,7 +31,7 @@ module.exports = {
           as: "items"
         }
       ],
-      order: [[{ model: Item, as: "items" }, "description", "ASC"]]
+      order: [[{ model: Item, as: "items" }, "createdAt", "ASC"]]
     })
       .then(list => {
         callback(null, list);

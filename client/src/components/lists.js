@@ -33,11 +33,11 @@ class Lists extends Component {
 
   userListGetter() {
     let that = this;
-    (function loop() {
+    (function listLoop() {
       setTimeout(function() {
         axios.get(`/api/lists/user/${that.context.id}`).then(res => {
           that.setState({ lists: res.data });
-          loop();
+          listLoop();
         });
       }, 1000);
     })();
@@ -59,14 +59,14 @@ class Lists extends Component {
       });
     });
     let that = this;
-    (function loop() {
+    (function itemLoop() {
       setTimeout(function() {
         axios.get(`/api/lists/${that.state.activeList}`).then(res => {
           that.setState({
             listName: res.data.list.name,
             items: res.data.list.items
           });
-          loop();
+          itemLoop();
         });
       }, 1000);
     })();
@@ -205,7 +205,7 @@ class Lists extends Component {
   }
 
   listResults() {
-    if (this.state.lists === []) {
+    if (this.state.lists.length === 0) {
       return <h3>No Lists here. Create a new one!</h3>;
     } else
       return (
@@ -226,9 +226,13 @@ class Lists extends Component {
   }
 
   showBasedOnActiveList() {
-    if (this.state.activeList === "" && this.state.lists !== []) {
-      return <h3>Select a list above or create a new one</h3>;
-    } else {
+    if (this.state.activeList === "" && this.state.lists.length !== 0) {
+      return (
+        <h4>
+          Create a new list or select one from above to start adding items
+        </h4>
+      );
+    } else if (this.state.activeList !== "") {
       return (
         <div className="delete-rename">
           <p onClick={() => this.handleListRename()}>Rename List</p>
