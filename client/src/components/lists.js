@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-
 import { AuthContext } from "../Auth";
 import AddList from "./addlist";
 import "../App.css";
@@ -8,6 +7,7 @@ import axios from "axios";
 
 class Lists extends Component {
   static contextType = AuthContext;
+
   state = {
     lists: [],
     itemDescription: "",
@@ -25,23 +25,24 @@ class Lists extends Component {
   }
 
   componentDidMount() {
-    this.userListGetter();
-    this.interval = setInterval(() => {
-      this.userListGetter();
-    }, 1000);
-  }
-
-  userListGetter() {
     axios.get(`/api/lists/user/${this.context.id}`).then(res => {
       this.setState({ lists: res.data });
     });
-
-    if (this.state.activeList !== "") {
-      this.interval = setInterval(() => {
-        this.listItemGetter();
-      }, 1000);
-    }
+    this.userListGetter();
   }
+
+  userListGetter() {
+    let that = this;
+    (function loop() {
+      setTimeout(function() {
+        axios.get(`/api/lists/user/${that.context.id}`).then(res => {
+          that.setState({ lists: res.data });
+          loop();
+        });
+      }, 1500);
+    })();
+  }
+
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -57,6 +58,18 @@ class Lists extends Component {
         items: res.data.list.items
       });
     });
+    let that = this;
+    (function loop() {
+      setTimeout(function() {
+        axios.get(`/api/lists/${that.state.activeList}`).then(res => {
+          that.setState({
+            listName: res.data.list.name,
+            items: res.data.list.items
+          });
+          loop();
+        });
+      }, 1500);
+    })();
   }
   handleDescription(event) {
     this.setState({ itemDescription: event.target.value });
