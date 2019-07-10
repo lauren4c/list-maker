@@ -139,7 +139,6 @@ class Lists extends Component {
     axios
       .post(`/api/lists/${this.state.activeList}/items/${id}/edit`, updatedItem)
       .then(res => {
-        console.log(JSON.stringify(res.data.message));
         if (
           JSON.stringify(res.data.message).includes("successfully") === true
         ) {
@@ -149,10 +148,10 @@ class Lists extends Component {
   }
   handleListDelete() {
     if (window.confirm("Are you sure you want to delete this list?")) {
+      this.setState({ activeList: "", listName: "" });
       axios.post(`/api/lists/${this.state.activeList}/delete`).then(res => {
         if (JSON.stringify(res.data.message).includes("successfully")) {
           console.log("list deleted!");
-          this.setState({ activeList: "", listName: "" });
         }
       });
     }

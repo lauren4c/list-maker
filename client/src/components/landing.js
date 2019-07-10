@@ -6,7 +6,7 @@ import "../App.css";
 const Landing = () => (
   <section className="landing">
     <div className="Main-text">
-      <h1>Welcome to The Ultimate Shopping list App</h1>
+      <h1>Welcome to The Ultimate List-Maker App</h1>
       <p>
         Create real-time shopping lists to share with with friends and family.
         Add lists, add items to each list, and then check it off when purchased

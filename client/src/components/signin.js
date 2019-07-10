@@ -19,7 +19,6 @@ class SignIn extends Component {
   }
 
   handleClientLogIn(res) {
-    console.log(JSON.stringify(res.data));
     this.context.logIn(
       res.data.user.id,
       res.data.user.email,
@@ -45,7 +44,6 @@ class SignIn extends Component {
       alert(JSON.stringify(res.data.message));
       if (JSON.stringify(res.data.message).includes("successfully") === true) {
         this.handleClientLogIn(res);
-        console.log("user is signged in");
       }
     });
   }
@@ -92,21 +90,26 @@ class SignIn extends Component {
                   className="form-control"
                   onChange={this.handlePassword}
                 />
+                <p className="helper-text">
+                  Password must be at least 6 characters
+                </p>
               </div>
 
               <br />
-              <input
-                type="submit"
-                value="Sign In"
-                className="User-button"
-                onClick={this.handleSignIn}
-              />
-              <input
-                type="submit"
-                value="Sign Up"
-                className="User-button"
-                onClick={this.handleSignUp}
-              />
+              <div className="user-login-buttons">
+                <input
+                  type="submit"
+                  value="Sign In"
+                  className="User-button"
+                  onClick={this.handleSignIn}
+                />
+                <input
+                  type="submit"
+                  value="Sign Up"
+                  className="User-button"
+                  onClick={this.handleSignUp}
+                />
+              </div>
             </form>
           </div>
         </div>

@@ -30,14 +30,12 @@ module.exports = {
     return Item.findByPk(req.params.id).then(item => {
       if (!item) {
         return callback("Item does not exist");
-        console.log("Item not found");
       } else {
         item
           .update(updatedItem, {
             fields: Object.keys(updatedItem)
           })
           .then(() => {
-            console.log("Made it through the queries update");
             callback(null, item);
           })
           .catch(err => {

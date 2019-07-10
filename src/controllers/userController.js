@@ -4,7 +4,6 @@ const passport = require("passport");
 
 module.exports = {
   create(req, res, next) {
-    console.log("Made it to the Controller!");
     let newUser = {
       email: req.body.email,
       password: req.body.password
