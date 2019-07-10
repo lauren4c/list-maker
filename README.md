@@ -1,6 +1,6 @@
 # List-Maker
 
-I was tasked with creating a a shared, real-time grocery list app over a span of seven days as the culmination of my Web Development certification with [Bloc](http://www.bloc.io). The project was fairly open-ended, but there were minimum requirements:
+I was tasked with creating a shared, real-time grocery list app over a span of seven days as the culmination of my Web Development certification with [Bloc](http://www.bloc.io). The project was fairly open-ended, but there were minimum requirements:
 
 ```
 App functionality:
@@ -25,16 +25,16 @@ Live site: https://lauren4c-list-maker.herokuapp.com/
 
 ### v1.0 Features include:
 
--User log-in and authentication via Express and Passport. User passwords are hashed and saved in a PostgreSQL database.
--Users can then create multiple lists, and also rename and delete them.
--Items can be added to each list, marked-as-completed, renamed, and deleted.
+-User log-in and authentication via Express and Passport. User passwords are hashed and saved in a PostgreSQL database.  
+-Users can then create multiple lists, and also rename and delete them.  
+-Items can be added to each list, marked-as-completed, renamed, and deleted.  
 -All of this is done in real-time via a `setInterval()` Axios call to the server, once every second to mimic real-time updates. While this process works fine for this project, it is not a feasible way to do it if the app were to scale. Given more time, I would like to set the app up with `Sockets.io` for the real-time functions.
 
 ### Upcoming Features:
-
-The 7-day timeline limited the time and features I was able to put into this app. Given more time, I would like to do the following:
 Check out the [live project board](https://trello.com/b/6tXWNv5w/synced-shopping-list).  
--Implement `Sockets.io` for real-time data updates to allow app to scale easily.
+The 7-day timeline limited the time and features I was able to put into this app. Given more time, I would like to do the following:
+
+-Implement `Sockets.io` for real-time data updates to allow app to scale easily.  
 -Allowing users to create groups for shared lists. Currently, to see the same lists, a user has to share their log-in information, which may not be feasible or comfortable for all users. By adding "groups", users could share the lists with their friends and family and each person would have their own log-in info, and still have access to the shared lists. This would also keep the Express-sessions cleaner.  
 -Allow users to set a max budget for each item. I created the 'item' model with this feature in mind, so it would be a fairly-easy feature to implement.
 
@@ -65,13 +65,14 @@ Want to run this project locally or us it as a jumping-off point for your next p
 
 #### React.JS
 
-During the last 7+ months at Bloc, I have used React in 4 projects, as well as using it in my [portfolio website](https://www.laurenforcey.com). While I have a good grasp on the basics, each project has allowed me to dive deeper into React and continue learning the framework. In this project, I used `React Context` to hold the state of the 'user_id' so that it was accessible anywhere in the app.
--Given more time, I would like to separate out some of the components more. The `lists.js` component is quite large and would be easier to understand and update if I were to move the `items` parts into its own component.
--I was unable to include front-end testing for this project due to both time-constraints and my lack of knowledge of `Jest`. I will be taking the time in the coming weeks to read about `Jest` and work on adding front-end testing to this app.
--For the API calls, I used `Axios`, which is a very straight-forward Promise-based HTTP client to make calls to the server-side of the project. I also used `Axios` in my [capstone project](https://github.com/lauren4c/sumco-animal-shelter).
+During the last 7+ months at Bloc, I have used React in 4 projects, as well as using it in my [portfolio website](https://www.laurenforcey.com). While I have a good grasp on the basics, each project has allowed me to dive deeper into React and continue learning the framework. In this project, I used `React Context` to hold the state of the 'user_id' so that it was accessible anywhere in the app.  
+-Given more time, I would like to separate out some of the components more. The `lists.js` component is quite large and would be easier to understand and update if I were to move the `items` parts into its own component.  
+-I was unable to include front-end testing for this project due to both time-constraints and my lack of knowledge of `Jest`. I will be taking the time in the coming weeks to read about `Jest` and work on adding front-end testing to this app.  
+-For the API calls, I used `Axios`, which is a very straight-forward Promise-based HTTP client to make calls to the server-side of the project. I also used `Axios` in my [capstone project](https://github.com/lauren4c/sumco-animal-shelter).  
+-OF NOTE: The README file in the `client` folder is React's standard file. I left it as-is for future reference if options and scripts.
 
 #### Node.js
 
-The Node framework has been the centerpiece of the last half of the Bloc curriculum. While initially I found it cumbersome, I now find the server-side coding to be more straight forward than the front-end. For this project, I utilized the `Sequelize` ORM to work with the `PostgreSQL` database, which allows for me to write JavaScript throughout the app.
--I used `Jasmine` for testing, and have `unit` and `integration` tests for all of the database models, that all pass with zero failures, however, there seem to be some exceptions thrown in the logs, so if I had more time, I would dig into that more. Functionally, everything in the app works as it should and I was not able to find an errors, so I must have an error in my test.
+The Node framework has been the centerpiece of the last half of the Bloc curriculum. While initially I found it cumbersome, I now find the server-side coding to be more straight forward than the front-end. For this project, I utilized the `Sequelize` ORM to work with the `PostgreSQL` database, which allows for me to write JavaScript throughout the app.  
+-I used `Jasmine` for testing, and have `unit` and `integration` tests for all of the database models, that all pass with zero failures, however, there seem to be some exceptions thrown in the logs, so if I had more time, I would dig into that more. Functionally, everything in the app works as it should and I was not able to find an errors, so I must have an error in my test.  
 -For logging-in users, I used `Express-sessions` and `Passport` using a `Local` strategy. I initially considered using `Auth0` for authentication and authorization, but ultimately decided that having all of the user information locally was a better fit for this app because it made it easier to develop, when having access to the `user_id` (and, in the future, tagging users in groups).
