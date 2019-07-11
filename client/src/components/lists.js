@@ -227,11 +227,7 @@ class Lists extends Component {
 
   showBasedOnActiveList() {
     if (this.state.activeList === "" && this.state.lists.length !== 0) {
-      return (
-        <h4>
-          Create a new list or select one from above to start adding items
-        </h4>
-      );
+      return <h4>Select a list from above to add or check-off items</h4>;
     } else if (this.state.activeList !== "") {
       return (
         <div className="delete-rename">
