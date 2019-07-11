@@ -28,7 +28,7 @@ Live site: https://lauren4c-list-maker.herokuapp.com/
 -User log-in and authentication via Express and Passport. User passwords are hashed and saved in a PostgreSQL database.  
 -Users can then create multiple lists, and also rename and delete them.  
 -Items can be added to each list, marked-as-completed, renamed, and deleted.  
--All of this is done in real-time via a recursive `setTimeout()` Axios call to the server, once every 1.5 seconds to mimic real-time updates. While this process works fine for this project, it is not a feasible way to do it if the app were to scale. Given more time, I would like to set the app up with `Sockets.io` for the real-time functions.
+-All of this is done in real-time via a recursive `setTimeout()` Axios call to the server, once every second to mimic real-time updates. While this process works fine for this project, it is not a feasible way to do it if the app were to scale. Given more time, I would like to set the app up with `Sockets.io` for the real-time functions.
 
 ### Upcoming Features:
 
@@ -36,29 +36,8 @@ Check out the [live project board](https://trello.com/b/6tXWNv5w/synced-shopping
 The 7-day timeline limited the time and features I was able to put into this app. Given more time, I would like to do the following:
 
 -Implement `Sockets.io` for real-time data updates to allow app to scale easily.  
--Allowing users to create groups for shared lists. Currently, to see the same lists, a user has to share their log-in information, which may not be feasible or comfortable for all users. By adding "groups", users could share the lists with their friends and family and each person would have their own log-in info, and still have access to the shared lists. This would also keep the Express-sessions cleaner.  
+-Allowing users to create groups for shared lists. Currently, to see the same lists, a user has to share their log-in information, which may not be feasible or comfortable for all users. By adding "groups", users could share the lists with their friends and family and each person would have their own log-in info, and still have access to the shared lists.
 -Allow users to set a max budget for each item. I created the 'item' model with this feature in mind, so it would be a fairly-easy feature to implement.
-
----
-
-### Local Configuration:
-
-Want to run this project locally or us it as a jumping-off point for your next project? Open up terminal, and let's get going!
-(This assumes you have [Node/NPM](http://www.nodejs.org) and [React](https://reactjs.org) already installed on your system.)
-
-1. Run `git clone https://github.com/lauren4c/list-maker` to download the project.
-
-2. `cd` into the root directory `list-maker`.
-
-3. Run `npm install` to install the server-side dependancies. Then `cd client` and run `npm install` a second time to install the client-side dependencies.
-
-4. Head back to the root directory `cd ..` and set up the database: `sequelize db:create list-maker` and `sequelize db:create list-maker-test` followed by `sequelize db:migrate`
-
-5. This project uses `express-session`, so let's get that set up locally, too. Enter `touch .env` while in the root directory, then add `cookieSecret=" <enter a string of your choice here> "` to the `.env` file.
-
-6. Finally, in the root directory run `npm run dev` to start the client and back-end side servers. It should open up the site in your browser automatically, but you can always go to http://localhost:3000 manually.
-
-##### Happy Hacking!
 
 ---
 
@@ -77,3 +56,24 @@ During the last 7+ months at Bloc, I have used React in 4 projects, as well as u
 The Node framework has been the centerpiece of the last half of the Bloc curriculum. While initially I found it cumbersome, I now find the server-side coding to be more straight forward than the front-end. For this project, I utilized the `Sequelize` ORM to work with the `PostgreSQL` database, which allows for me to write JavaScript throughout the app.  
 -I used `Jasmine` for testing, and have `unit` and `integration` tests for all of the database models, that all pass with zero failures, however, there seem to be some exceptions thrown in the logs, so if I had more time, I would dig into that more. Functionally, everything in the app works as it should and I was not able to find an errors, so I must have an error in my test.  
 -For logging-in users, I used `Express-sessions` and `Passport` using a `Local` strategy. I initially considered using `Auth0` for authentication and authorization, but ultimately decided that having all of the user information locally was a better fit for this app because it made it easier to develop, when having access to the `user_id` (and, in the future, tagging users in groups).
+
+---
+
+### Local Configuration:
+
+Want to run this project locally or us it as a jumping-off point for your next project? Open up terminal, and let's get going!
+(This assumes you have [Node/NPM](http://www.nodejs.org) and [React](https://reactjs.org) already installed on your system.)
+
+1. Run `git clone https://github.com/lauren4c/list-maker` to download the project.
+
+2. `cd` into the root directory `list-maker`.
+
+3. Run `npm install` to install the server-side dependancies. Then `cd client` and run `npm install` a second time to install the client-side dependencies.
+
+4. Head back to the root directory `cd ..` and set up the database: `sequelize db:create list-maker` and `sequelize db:create list-maker-test` followed by `sequelize db:migrate && sequelize db:migrate --env test`.
+
+5. This project uses `express-session`, so let's get that set up locally, too. Enter `touch .env` while in the root directory, then add `cookieSecret=" <enter a string of your choice here> "` to the `.env` file.
+
+6. Finally, in the root directory run `npm run dev` to start the client and back-end side servers. It should open up the site in your browser automatically, but you can always go to http://localhost:3000 manually.
+
+##### Happy Hacking!
