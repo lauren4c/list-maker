@@ -106,7 +106,7 @@ class SignIn extends Component {
                 <input
                   type="submit"
                   value="Sign Up"
-                  className="User-button"
+                  className="sign-up-button"
                   onClick={this.handleSignUp}
                 />
               </div>

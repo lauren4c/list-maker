@@ -43,10 +43,6 @@ class Lists extends Component {
     })();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
   setActiveList(id) {
     this.setState({ activeList: id }, () => this.listItemGetter());
   }
